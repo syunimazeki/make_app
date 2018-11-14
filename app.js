@@ -4,6 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var helmet = require('helmet');
+var passport = require('passport');
+var TwitterStrategy = require('passport-twitter');
+const cron = require('cron').CronJob;
+var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -21,6 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.session());
+app.use(passport.initialize());
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
@@ -41,6 +47,40 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (obj, done) {
+  done(null, obj);
+});
+
+passport.use(new TwitterStrategy({
+  consumerKey:'nO0iAhOwyCJe16EMesrolKu4i',//TwitterのconsumerKey
+  consumerSecret:'ISJd1o2cXCWMEXVNyzli2hX5jgvYQfSQgxsW81SmQalj3V9pfI',//TwitterのconsumerSecret
+  callbackURL: 'http://localhost:8000/auth/twitter/callback'//認証成功時の戻り先URL
+},
+function(token, tokenSecret, profile, done) {
+  process.nextTick(function () {
+    return done(null, profile);
+  });
+}));
+
+//自作サービス中でtwitter認証を行うURLを設定する
+app.get('/auth/twitter',
+passport.authenticate('twitter'));
+
+//認証正常時の戻り先URLの設定をする
+app.get('/auth/twitter/callback',
+passport.authenticate('twitter', {
+  failureRedirect: '/login' }),//認証失敗時のリダイレクト先を書く
+function(req, res) {
+  // ここでは認証成功時のルーティング設定を書く
+  // ちなみにreq.userでログインユーザの情報が取れる
+  //     例) req.user.useridでユーザIDがとれます
+  res.redirect('/');
 });
 
 module.exports = app;
