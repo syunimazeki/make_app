@@ -25,9 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.session({ secret: 'keyboard cat' }));
-app.use(passport.session());
+app.use(session({ secret: '8a9091715584c2ee', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
@@ -39,7 +39,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// error handlera
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -63,11 +63,12 @@ passport.use(new TwitterStrategy({
   consumerSecret:'ISJd1o2cXCWMEXVNyzli2hX5jgvYQfSQgxsW81SmQalj3V9pfI',//TwitterのconsumerSecret
   callbackURL: 'http://localhost:8000/auth/twitter/callback'//認証成功時の戻り先URL
 },
-function(token, tokenSecret, profile, done) {
-  process.nextTick(function () {
-    return done(null, profile);
-  });
-}));
+  function(token, tokenSecret, profile, cb) {
+    //User.findOrCreate({ twitterId: profile.id }, function (err, user) {
+      //return cb(err, user);
+    //});
+  }
+));
 
 //自作サービス中でtwitter認証を行うURLを設定する
 app.get('/auth/twitter',
@@ -80,7 +81,7 @@ passport.authenticate('twitter', {
 function(req, res) {
   // ここでは認証成功時のルーティング設定を書く
   // ちなみにreq.userでログインユーザの情報が取れる
-  //     例) req.user.useridでユーザIDがとれます
+  //例) req.user.useridでユーザIDがとれます
   res.redirect('/');
 });
 
