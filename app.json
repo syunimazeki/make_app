@@ -1,0 +1,7 @@
+{
+  "name": "TwiValue",
+  "description": "テスト",
+  "logo": "",
+  "keywords": ["node"],
+  "image": "heroku/nodejs"
+}
