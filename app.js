@@ -4,10 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var helmet = require('helmet');
-var passport = require('passport');
-var TwitterStrategy = require('passport-twitter');
-const cron = require('cron').CronJob;
 var session = require('express-session');
+var passport = require('passport')
+  , TwitterStrategy = require('passport-twitter').Strategy;
+
+const cron = require('cron').CronJob;
+
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -61,12 +63,10 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new TwitterStrategy({
   consumerKey:'nO0iAhOwyCJe16EMesrolKu4i',//TwitterのconsumerKey
   consumerSecret:'ISJd1o2cXCWMEXVNyzli2hX5jgvYQfSQgxsW81SmQalj3V9pfI',//TwitterのconsumerSecret
-  callbackURL: 'http://localhost:8000/auth/twitter/callback'//認証成功時の戻り先URL
+  callbackURL: "http://localhost:8000/auth/twitter/callback"//認証成功時の戻り先URL
 },
-  function(token, tokenSecret, profile, cb) {
-    //User.findOrCreate({ twitterId: profile.id }, function (err, user) {
-      //return cb(err, user);
-    //});
+  function(token, tokenSecret, profile, done) {
+      return done(null,profile);
   }
 ));
 

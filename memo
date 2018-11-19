@@ -28,5 +28,21 @@ nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
       </div>
     </nav>
 
+https://7-step.jp/login/twitter
+
+
+function(token, tokenSecret, profile, cb) {
+    User.findOrCreate({ twitterId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+
+function(token, tokenSecret, profile, done) {
+    User.findOrCreate({ twitterId: profile.id }, function (err, user) {
+      return done(null,profile);
+    });
+
+var passport = require('passport');
+var TwitterStrategy = require('passport-twitter');
 
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit" href="/login">ログイン/アカウント作成</button>
