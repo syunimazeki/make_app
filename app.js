@@ -6,7 +6,7 @@ var logger = require('morgan');
 var helmet = require('helmet');
 var session = require('express-session');
 var passport = require('passport')
-  , TwitterStrategy = require('passport-twitter').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
 
 const cron = require('cron').CronJob;
 
