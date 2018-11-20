@@ -63,7 +63,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new TwitterStrategy({
   consumerKey:'nO0iAhOwyCJe16EMesrolKu4i',//TwitterのconsumerKey
   consumerSecret:'ISJd1o2cXCWMEXVNyzli2hX5jgvYQfSQgxsW81SmQalj3V9pfI',//TwitterのconsumerSecret
-  callbackURL: "http://localhost:8000/auth/twitter/callback"//認証成功時の戻り先URL
+  callbackURL: "https://salty-hollows-96901.herokuapp.com/auth/twitter/callback"//認証成功時の戻り先URL
 },
   function(token, tokenSecret, profile, done) {
       return done(null,profile);
