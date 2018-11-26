@@ -66,7 +66,7 @@ passport.use(new TwitterStrategy({
   callbackURL: "https://salty-hollows-96901.herokuapp.com/auth/twitter/callback"//認証成功時の戻り先URL
 },
   function(token, tokenSecret, profile, done) {
-      return done(null,profile);
+    return done(null,profile);
   }
 ));
 
