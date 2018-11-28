@@ -65,10 +65,17 @@ passport.use(new TwitterStrategy({
   consumerSecret:'ISJd1o2cXCWMEXVNyzli2hX5jgvYQfSQgxsW81SmQalj3V9pfI',//TwitterのconsumerSecret
   callbackURL: "https://salty-hollows-96901.herokuapp.com/auth/twitter/callback"//認証成功時の戻り先URL
 },
-  function(token, tokenSecret, profile, done) {
-    return done(null,profile);
-  }
-));
+function(token, tokenSecret, profile, cb) {
+  // In this example, the user's Twitter profile is supplied as the user
+  // record.  In a production-quality application, the Twitter profile should
+  // be associated with a user record in the application's database, which
+  // allows for account linking and authentication with other identity
+  // providers.
+  process.nextTick(function () {
+     return cb(null, profile);
+  });
+})
+);
 
 //自作サービス中でtwitter認証を行うURLを設定する
 app.get('/auth/twitter',
